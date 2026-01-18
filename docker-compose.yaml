@@ -1,0 +1,25 @@
+services:
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+
+  frontend:
+    build:
+      context: ./Frontend/message_app_project
+      dockerfile: dockerfile
+    ports:
+      - 5173:5173
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: dockerfile
+    depends_on:
+      - mongo
+    ports:
+      - 3000:3000
+
+volumes:
+  mongo-data:
+    driver: local
