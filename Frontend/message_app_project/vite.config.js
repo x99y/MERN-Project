@@ -5,12 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0', // Listen on all network interfaces
-    port: 5173,      // Explicitly define port
+    port: 5173,      // Define port
     watch: {
       usePolling: true, // Needed for Docker
     },
     hmr: {
-      host: 'localhost', // HMR host is tricky in Docker
+      host: 'localhost', // HMR host for Docker
     },
   },
 });
