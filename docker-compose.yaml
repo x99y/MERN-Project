@@ -16,6 +16,8 @@ services:
       - .env
     environment:
       - VITE_API_URL=http://backend:${BACKEND_PORT}
+    image: 
+      message-app-frontend:${APP_VERSION}-${APP_ENV}
 
 
   backend:
@@ -31,7 +33,9 @@ services:
     environment:
       - MONGO_URL=${MONGO_URL}
       - PORT=${BACKEND_PORT}
-      
+    image: 
+      message-app-backend:${APP_VERSION}-${APP_ENV}
+
 volumes:
   mongo-data:
     driver: local
