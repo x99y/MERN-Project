@@ -4,7 +4,6 @@ on:
   push:
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -13,7 +12,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./backend
 
       - name: Run tests
-        run: |
-          npm run test
+        run: npm test
+        working-directory: ./backend
+
+
