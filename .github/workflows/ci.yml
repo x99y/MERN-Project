@@ -2,15 +2,16 @@ name: CI
 
 on: 
   push:
-    branches: [ main ]
+    branches: [ main , master]
   pull_request:
-    branches: [ main ]
+    branches: [ main , master]
 
 env:
   JWT_SECRET: ${{secrets.JWT_SECRET}}
   MONGO_URL: ${{secrets.MONGO_URL}}
 
 jobs:
+
 
   run_backend_tests:
     name: Run Backend Tests
