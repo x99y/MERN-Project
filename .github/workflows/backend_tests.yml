@@ -1,4 +1,4 @@
-name: Run tests
+name: Run Frontend Tests
 
 on:
   push:
@@ -12,10 +12,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./Backend
+        working-directory: ./Frontend/message-app
 
       - name: Run tests
         run: npm test
-        working-directory: ./Backend
+        working-directory: ./Frontend/message-app
 
 
