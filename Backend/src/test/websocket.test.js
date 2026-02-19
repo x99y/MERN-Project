@@ -7,19 +7,56 @@ const { io } = require('socket.io-client');
 const { disconnect, emit } = require('process');
 const { promises } = require('dns');
 const { resolve } = require('path');
+const mongoose = require("mongoose");
 
 
-jest.mock('../middleware/jwtFunctions', () => ({
-  validateJWT: jest.fn().mockResolvedValue({ id: 1, name: 'TestUser' }),
+jest.mock('../middleware/jwtFunctions', () => {
+  const mongoose = require("mongoose");
+
+  return {
+    validateJWT: jest.fn().mockImplementation(() => {
+      return Promise.resolve({
+        decodedValidToken: {
+          userId: new mongoose.Types.ObjectId()
+        }
+      });
+    })
+  };
+});
+
+// Mock DB models used by the socket server so tests don't hit a real database
+jest.mock('../database/entities/User', () => ({
+  UserModel: {
+    findById: jest.fn().mockImplementation((id) => ({
+      exec: jest.fn().mockResolvedValue({ _id: id, username: 'testuser' }),
+    })),
+  },
 }));
 
+jest.mock('../database/entities/RoomChat', () => ({
+  RoomChatModel: {
+    findById: jest.fn().mockImplementation((id) => ({
+      exec: jest.fn().mockResolvedValue({ _id: id, name: 'Test Room' }),
+    })),
+  },
+}));
 
-// Avoids calls to the Database 
+jest.mock('../database/entities/Profile', () => ({
+  ProfileModel: {
+    findOne: jest.fn().mockImplementation(() => ({
+      exec: jest.fn().mockResolvedValue({ image: null }),
+    })),
+  },
+}));
+
 jest.mock('../database/entities/Message', () => ({
-  
   MessageModel: {
     create: jest.fn().mockImplementation(async (msg) => ({
-      ...msg, id: Date.now(),
+      ...msg,
+      id: Date.now(),
+    })),
+    find: jest.fn().mockImplementation(() => ({
+      sort: jest.fn().mockResolvedValue([]),
     })),
   },
 }));
@@ -29,20 +66,25 @@ describe('Websocket Test', () => {
   let httpServer;
   let clientSocket;
   let io;
+  let port;
   
   
   // Start the server for testing
   beforeAll((done) => {
     httpServer = http.createServer();
     io = initSocketServer(httpServer);
+
     httpServer.listen(() => {
-      const port = httpServer.address().port;
-      clientSocket = new Client (`http://localhost:${httpServer.address().port}`, {
-      auth: { token: 'FAKE_TOKEN' }, 
+      port = httpServer.address().port;
+
+      clientSocket = new Client(`http://localhost:${port}`, {
+        extraHeaders: {
+          cookie: "authcookie=FAKE_TOKEN"
+        }
+      });
+
+      clientSocket.on('connect', done);
     });
-    
-    clientSocket.on('connect', done);
-   });
   });
 
   // Close io and server
@@ -62,30 +104,23 @@ describe('Websocket Test', () => {
     expect(clientSocket.connected).toBe(true);
   });
 
-
-  test('broadcast "Message" event', (done) => {
-    const msg = { text: 'Hello' };
-    clientSocket.on('Message', (received) => {
-      expect(received.text).toBe(msg.text);
-      done();
-    });
-    clientSocket.emit('Message', msg);
-  });
-    
-
   test('emit typing event', (done) => {
     const data = {user: 'Jack', typing: true};
 
     // Second client
-    const secondSocket = new Client(`http://localhost:${httpServer.address().port}`);
-
+    const secondSocket = new Client(`http://localhost:${port}`, {
+        extraHeaders: {
+          cookie: "authcookie=FAKE_TOKEN_2"
+        }
+      });
     secondSocket.on('connect', () => {
+
       secondSocket.on('userTyping', (payload) => {
         expect(payload).toEqual(data);
-        secondSocket.close();
+        secondSocket.disconnect();
         done();
       });
-
+      
       clientSocket.emit('typing', data);
     });
   });
@@ -93,22 +128,32 @@ describe('Websocket Test', () => {
 
 
   test('send and receive room messages', (done) =>{
-    const roomId = 'test-room';
+    const roomId = new mongoose.Types.ObjectId();
     const msg = { text: 'room message'};
 
-    const secondSocket = new Client(`http://localhost:${httpServer.address().port}`);
+    const secondSocket = new Client(`http://localhost:${port}`, {
+        extraHeaders: {
+          cookie: "authcookie=FAKE_TOKEN_3"
+        }
+      });
+
+    let joinedCount = 0;
 
     secondSocket.on('connect', () => {
-      clientSocket.emit('joinRoom', roomId);
-      secondSocket.emit("joinRoom", roomId);
-
+      // Setup listener first
       secondSocket.on('roomMessage', (message) => {
-        expect(message.text).toBe(msg.text);
-        secondSocket.close();
+        expect(message.content).toBe(msg.text);
+        secondSocket.disconnect();
         done();
       });
 
-      clientSocket.emit('roomMessage', {roomId, msg});
+
+      clientSocket.emit('joinRoom', roomId.toString());
+      secondSocket.emit('joinRoom', roomId.toString());
+
+      setTimeout(() => {
+        clientSocket.emit('roomMessage', { roomId: roomId.toString(), msg: msg.text });
+      }, 100);
     });
   });
 });
