@@ -14,12 +14,12 @@ jobs:
 
   run_backend_tests:
     name: Run Backend Tests
-    uses: ./.github/workflows/backend-tests.yml
+    uses: ./.github/workflows/backend_tests.yml
     secrets: inherit
 
   run_frontend_tests:
     name: Run Frontend Tests
-    uses: ./.github/workflows/frontend-tests.yml
+    uses: ./.github/workflows/frontend_tests.yml
     secrets: inherit
 
   call_cd_workflow:
