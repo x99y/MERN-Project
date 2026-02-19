@@ -1,6 +1,5 @@
 name: CD
 
-# New workflow event! The call!
 on: workflow_call
 
 jobs:
@@ -10,20 +9,15 @@ jobs:
 
     steps:
     # Clone a copy of the project into the action environment.
-    # Yes, even though this action was triggered by another action that already did this;
-    # each action is its own separate environment and so a checkout must be done again.
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Install dependencies
       run: npm install
+      working-directory: ./Backend
 
     - name: Authenticate gcloud
-      # credentials_json is not fully recommended, for security purposes, because it's a raw JSON string.
-      # That raw string is so easy to manage as a repository secret though, 
-      # so we should use it and just be very very careful with it!
-      # But the key thing that this step must do is authenticate this workflow job in GCP.
-      # Read more here: https://github.com/google-github-actions/auth
+
       uses: google-github-actions/auth@v2
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
@@ -47,7 +41,7 @@ jobs:
           # If you already compiled a Docker image, don't use the "source" option. 
           # Using "source" is an awesome lazy way to tell Cloud Run to turn our project into a Docker image.
           # Compare "image" and "source" inputs here: https://github.com/google-github-actions/deploy-cloudrun#inputs
-          source: ./
+          source: ./Backend
 
           # The GitHub repo needs all .env variables set up as repository secrets or organization secrets in this page:
           # https://github.com/<UserOrOrgName>/<RepoName>/settings/secrets/actions
