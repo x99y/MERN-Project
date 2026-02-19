@@ -1,12 +1,6 @@
 const http = require('http');
 const { io: Client } = require('socket.io-client');
 const initSocketServer = require('../sockets/websocket');
-const { MessageModel } = require('../database/entities/Message');
-const { create } = require('domain');
-const { io } = require('socket.io-client');
-const { disconnect, emit } = require('process');
-const { promises } = require('dns');
-const { resolve } = require('path');
 const mongoose = require("mongoose");
 
 
