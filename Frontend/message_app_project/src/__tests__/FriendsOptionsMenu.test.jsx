@@ -33,8 +33,11 @@ vi.mock("../api", () => ({
 
 
 describe("OptionMenu", () => {
-  const friend = {_id: "helloworld"};
-
+  const friend = {
+    _id: "helloworld",
+    connectionId: "helloworld"
+  };
+  
   beforeEach(() => {
     vi.clearAllMocks();
   });

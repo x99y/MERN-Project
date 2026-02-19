@@ -12,10 +12,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./Frontend/message-app
+        working-directory: ./Frontend/message_app_project
 
       - name: Run tests
         run: npm test
-        working-directory: ./Frontend/message-app
+        working-directory: ./Frontend/message_app_project
 
 
