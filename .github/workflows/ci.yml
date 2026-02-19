@@ -1,0 +1,54 @@
+name: CI
+
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  JWT_SECRET: ${{secrets.JWT_SECRET}}
+  MONGODB_DATABASE_URL: ${{secrets.MONGODB_DATABASE_URL}}
+
+jobs:
+  run_server_tests:
+    name: Run server tests 
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Load .env file
+      uses: aarcangeli/load-dotenv@v1
+
+    # only for testing
+    - name: Echo loaded .env variables
+      run: |
+        echo "JWT_SECRET=$JWT_SECRET"
+        echo "MONGODB_DATABASE_URL=$MONGODB_DATABASE_URL"
+    
+    - name: Test on Node.js '22.x'
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - run: npm install
+
+    # Neat trick to let us use a local MongoDB instance
+    # during the testing command that comes next!
+    - name: Setup MongoDB in Action
+      uses: supercharge/mongodb-github-action@1.11.0
+      with:
+        mongodb-version: 7
+
+    - name: Run tests
+      run: npm run test
+      env:
+        CI: true
+    
+
+
+  call_cd_workflow:
+    needs: run_server_tests
+    name: Call the CD workflow
+    uses: ./.github/workflows/cd.yml
+    secrets: inherit
