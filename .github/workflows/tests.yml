@@ -12,10 +12,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./backend
+        working-directory: ./Backend
 
       - name: Run tests
         run: npm test
-        working-directory: ./backend
+        working-directory: ./Backend
 
 
