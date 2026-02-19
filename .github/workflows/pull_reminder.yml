@@ -4,7 +4,8 @@ on:
   pull_request:
     types: [opened, reopened]
     branches:
-      - main
+      [main, master]
+
 jobs:
   example_comment_pr:
     runs-on: ubuntu-latest
