@@ -8,47 +8,22 @@ on:
 
 env:
   JWT_SECRET: ${{secrets.JWT_SECRET}}
-  MONGODB_DATABASE_URL: ${{secrets.MONGODB_DATABASE_URL}}
+  MONGO_URL: ${{secrets.MONGO_URL}}
 
 jobs:
-  run_server_tests:
-    name: Run server tests 
-    runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v4
+  run_backend_tests:
+    name: Run Backend Tests
+    uses: ./.github/workflows/backend-tests.yml
+    secrets: inherit
 
-    - name: Load .env file
-      uses: aarcangeli/load-dotenv@v1
-
-    # only for testing
-    - name: Echo loaded .env variables
-      run: |
-        echo "JWT_SECRET=$JWT_SECRET"
-        echo "MONGODB_DATABASE_URL=$MONGODB_DATABASE_URL"
-    
-    - name: Test on Node.js '22.x'
-      uses: actions/setup-node@v4
-      with:
-        node-version: 22
-    - run: npm install
-
-    # Neat trick to let us use a local MongoDB instance
-    # during the testing command that comes next!
-    - name: Setup MongoDB in Action
-      uses: supercharge/mongodb-github-action@1.11.0
-      with:
-        mongodb-version: 7
-
-    - name: Run tests
-      run: npm run test
-      env:
-        CI: true
-    
-
+  run_frontend_tests:
+    name: Run Frontend Tests
+    uses: ./.github/workflows/frontend-tests.yml
+    secrets: inherit
 
   call_cd_workflow:
-    needs: run_server_tests
-    name: Call the CD workflow
+    name: Call CD Workflow
+    needs: [run_backend_tests, run_frontend_tests]
     uses: ./.github/workflows/cd.yml
     secrets: inherit
