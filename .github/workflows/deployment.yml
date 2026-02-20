@@ -1,0 +1,47 @@
+# .github/workflows/deployment.yml
+name: Build and Deploy the ReactJS App
+
+on: workflow_call
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Load a copy of the repository's latest commit
+      - uses: actions/checkout@v4
+
+      # Install the ReactJS project's dependencies, including dev dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./Frontend/message_app_project
+
+
+      # Build the ReactJS app
+      - name: Build the ReactJS app
+        run: npm run build
+        working-directory: ./Frontend/message_app_project
+        
+      # Log the output of the build
+      # This varies depending on your ReactJS build tool
+      # e.g. Vite builds ReactJS apps to a "dist" folder
+      - name: Confirm the build output exists
+        run: ls ./dist/
+
+      # Use the "Netlify Actions" action listed above
+      # We are using the `dist/` folder created by the build step as the publish directory
+      # As well as other configuration to help ensure that the action is deploying
+      # safely, securely, and identifiably, to Netlify.
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './dist'
+          production-branch: master
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
