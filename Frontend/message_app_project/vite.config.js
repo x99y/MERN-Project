@@ -13,5 +13,4 @@ export default defineConfig({
       host: 'localhost', // HMR host for Docker
     },
   },
-  envDir: '../../',
 });
