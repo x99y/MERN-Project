@@ -48,4 +48,5 @@ jobs:
           NODE_ENV: production
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         timeout-minutes: 1
