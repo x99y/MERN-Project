@@ -7,9 +7,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repo
+        run: |
+          echo "Not deploying for now, no credits left"
+          exit 0
+          
       # Load a copy of the repository's latest commit
       - uses: actions/checkout@v4
-
+      
       # Install the ReactJS project's dependencies, including dev dependencies
       - name: Install dependencies
         run: npm install
