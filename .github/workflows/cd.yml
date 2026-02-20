@@ -22,17 +22,6 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      # Build Docker image
-    - name: Build Docker image
-      run: |
-        cd Frontend/message_app_project
-        docker build -f Dockerfile.prod -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest .
-
-    # Push Docker image to GCR
-    - name: Push Docker image
-      run: |
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest
-
     - id: 'deploy'
       name: 'Build and deploy image to GCR'
       uses: 'google-github-actions/deploy-cloudrun@v2'
@@ -52,10 +41,8 @@ jobs:
           # If you already compiled a Docker image, don't use the "source" option. 
           # Using "source" is an awesome lazy way to tell Cloud Run to turn our project into a Docker image.
           # Compare "image" and "source" inputs here: https://github.com/google-github-actions/deploy-cloudrun#inputs
+          source: ./Frontend/message_app_project
 
-          #Test dockerfile upload
-          image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest
-          flags: --allow-unauthenticated
 
     # Literally just print the URL for any Actions debugging, not at all necessary for deployment.
     - name: 'Use output'
