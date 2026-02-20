@@ -21,6 +21,8 @@ jobs:
       - name: Build the ReactJS app
         run: npm run build
         working-directory: ./Frontend/message_app_project
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
         
       # Log the output of the build
       # This varies depending on your ReactJS build tool
@@ -46,5 +48,4 @@ jobs:
           NODE_ENV: production
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
         timeout-minutes: 1
