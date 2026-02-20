@@ -1,5 +1,7 @@
 import { redirect, useNavigate } from "react-router";
 import "../styles/WelcomePage.css"
+import logo from './assets/Logo.App.png'
+
 
 export function WelcomePage() {
     const navigate = useNavigate();
@@ -14,7 +16,7 @@ export function WelcomePage() {
     <main className="welcome-container">
         
        <div className="welcome-image-section">
-        <img src="/src/assets/Logo.App.png" alt="Logo by IA" />
+        <img src={logo} alt="Logo by IA" />
        </div>
        
         
