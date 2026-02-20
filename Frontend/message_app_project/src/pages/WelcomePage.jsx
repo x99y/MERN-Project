@@ -1,6 +1,6 @@
 import { redirect, useNavigate } from "react-router";
 import "../styles/WelcomePage.css"
-import logo from './assets/Logo.App.png'
+import logo from "../assets/Logo.App.png"
 
 
 export function WelcomePage() {
