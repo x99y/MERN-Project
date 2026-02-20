@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 
 async function dbConnect() {
 	try {
-		let targetDatabaseUrl = process.env.MONGO_URL || "mongodb://mongo:27017/DatingAppDatabase";
+		let targetDatabaseUrl = process.env.MONGODB_DATABASE_URL || "mongodb://mongo:27017/DatingAppDatabase";
 		console.log("Connecting to database: " + targetDatabaseUrl);
 		await mongoose.connect(targetDatabaseUrl);
 		console.log("Database connected!");
