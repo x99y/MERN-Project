@@ -24,7 +24,7 @@ export default function UserLogInForm({ setError }) {
     try{
       
       // send to api for authentication verify, then give response, if status 200, display sucessfull message
-      const response = await api.post("http://localhost:3000/users/login",{}, {
+      const response = await api.post("/users/login",{}, {
         headers: {
           Authorization: "Basic " + btoa(email + ":" + password),
         },

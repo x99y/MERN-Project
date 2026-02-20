@@ -35,8 +35,7 @@ app.use(cookieParser());
 let corsOption = { 
   credentials: true,
   origin: [
-  "http://localhost:5173",
-  "https://DatingApp.com"
+  process.env.FRONTEND_URL,
 ], optionsSuccessStatus: 200}
 app.use(cors(corsOption));
 
