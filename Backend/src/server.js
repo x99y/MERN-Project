@@ -14,8 +14,6 @@ const roomChatController = require("./controllers/RoomChatController");
 const multer = require("multer");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const dotenv = require('dotenv');
-dotenv.config();
 
 
 // // Serve files from "public" folder
