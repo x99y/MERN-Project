@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ main , master]
 
+    #do to change this, could be better if we didnt send this to every test workflow
 env:
   JWT_SECRET: ${{secrets.JWT_SECRET}}
   MONGO_URL: ${{secrets.MONGO_URL}}

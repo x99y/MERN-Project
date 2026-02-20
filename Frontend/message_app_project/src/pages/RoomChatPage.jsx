@@ -28,6 +28,7 @@ export default function RoomChatPage() {
       // Connect to the server using Socket.IO, sending the JWT in auth
       const newSocket = io(API_BASE_URL, {
           withCredentials: true, //Do this to send the cookie to the websocket
+          transports: ["websocket"],
       });
 
       newSocket.on("connect", () => console.log("Socket connected!"));

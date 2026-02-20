@@ -12,12 +12,7 @@ module.exports = (server) => {
   
   const io = new Server(server, {
     cors: {
-      origin: [
-        "http://localhost:3000",
-        "http://localhost:5000",
-        "http://localhost:5173",
-        "http://DatingApp.com"
-      ],
+      origin: process.env.FRONTEND_URL,
       methods: [ "GET" , "POST" ],
       credentials: true //Do this to accept cookies with the socket connection
     }
