@@ -31,11 +31,13 @@ app.use(
 
 app.use(cookieParser());
 
+console.log("Frontend URL from env:", process.env.FRONTEND_URL);
+
 // Allow requests only from this origins
 let corsOption = { 
   credentials: true,
   origin: [
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL || "http://localhost:5173",
 ], optionsSuccessStatus: 200}
 app.use(cors(corsOption));
 
