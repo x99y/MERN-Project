@@ -25,7 +25,7 @@ jobs:
       # This varies depending on your ReactJS build tool
       # e.g. Vite builds ReactJS apps to a "dist" folder
       - name: Confirm the build output exists
-        run: ls ./dist/
+        run: ls ./Frontend/message_app_project/dist/
 
       # Use the "Netlify Actions" action listed above
       # We are using the `dist/` folder created by the build step as the publish directory
@@ -34,7 +34,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './dist'
+          publish-dir: './Frontend/message_app_project/dist'
           production-branch: master
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
