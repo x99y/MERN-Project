@@ -22,6 +22,17 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
+      # Build Docker image
+    - name: Build Docker image
+      run: |
+        cd Frontend/message_app_project
+        docker build -f Dockerfile.prod -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest .
+
+    # Push Docker image to GCR
+    - name: Push Docker image
+      run: |
+        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest
+
     - id: 'deploy'
       name: 'Build and deploy image to GCR'
       uses: 'google-github-actions/deploy-cloudrun@v2'
@@ -44,8 +55,7 @@ jobs:
 
           #Test dockerfile upload
           image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest
-          dockerfile: ./Frontend/message_app_project/Dockerfile.prod
-          allow-unauthenticated: true
+          flags: --allow-unauthenticated
 
     # Literally just print the URL for any Actions debugging, not at all necessary for deployment.
     - name: 'Use output'
