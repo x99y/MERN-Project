@@ -1,7 +1,7 @@
-//const path = require('path');
-//require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  const path = require('path');
+  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+}
 
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || 'localhost';
