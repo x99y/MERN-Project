@@ -41,8 +41,11 @@ jobs:
           # If you already compiled a Docker image, don't use the "source" option. 
           # Using "source" is an awesome lazy way to tell Cloud Run to turn our project into a Docker image.
           # Compare "image" and "source" inputs here: https://github.com/google-github-actions/deploy-cloudrun#inputs
-          source: ./Frontend/message_app_project
 
+          #Test dockerfile upload
+          image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest
+          dockerfile: ./Frontend/message_app_project/Dockerfile.prod
+          allow-unauthenticated: true
 
     # Literally just print the URL for any Actions debugging, not at all necessary for deployment.
     - name: 'Use output'
