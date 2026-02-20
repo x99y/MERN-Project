@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
 const http = require("http");                 
 const { dbConnect } = require("./database/connectionManager.js");
 const { app } = require("./server.js");
-const initSocket = require("./sockets/websockets.js");
+const initSocket = require("./sockets/websocket.js");
 
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || 'localhost';
