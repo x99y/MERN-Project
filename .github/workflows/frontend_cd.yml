@@ -1,13 +1,11 @@
 # .github/workflows/deployment.yml
-name: Build and Deploy the ReactJS App
+name: Build and Deploy the Frontend React App to Netlify
 
 on: workflow_call
 
 jobs:
   build:
 
-    #skip this step for now, no credits left
-    if: false
     runs-on: ubuntu-latest
     steps:       
       # Load a copy of the repository's latest commit

@@ -1,4 +1,4 @@
-name: deploy_backend_CD
+name: Deploy the Backend to Google Cloud Run
 
 on: workflow_call
 

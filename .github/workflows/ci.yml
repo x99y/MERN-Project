@@ -27,11 +27,11 @@ jobs:
   call_cd_backend_workflow:
     name: Call CD Backend Workflow
     needs: [run_backend_tests, run_frontend_tests]
-    uses: ./.github/workflows/cd.yml
+    uses: ./.github/workflows/backend_cd.yml
     secrets: inherit
 
   call_cd_frontend_workflow:
     name: Call CD Frontend Workflow
     needs: [run_backend_tests, run_frontend_tests, call_cd_backend_workflow]
-    uses: ./.github/workflows/deployment.yml
+    uses: ./.github/workflows/frontend_cd.yml
     secrets: inherit
