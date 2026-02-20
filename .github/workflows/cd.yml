@@ -51,6 +51,9 @@ jobs:
             MONGODB_DATABASE_URL=${{secrets.MONGODB_DATABASE_URL}}
             FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
 
+          #Testing fix for websocket connection issues
+          concurrency: 1
+
 
     # Literally just print the URL for any Actions debugging, not at all necessary for deployment.
     - name: 'Use output'

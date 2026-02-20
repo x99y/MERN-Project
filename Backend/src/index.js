@@ -3,16 +3,25 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 }
 
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || 'localhost';
+const http = require("http");                 
 const { dbConnect } = require("./database/connectionManager.js");
 const { app } = require("./server.js");
+const initSocket = require("./sockets/websockets.js");
+
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || 'localhost';
 
 // DATABASE CONNECTION
 dbConnect().then(() => {
-    // EXPRESS SERVER ACTIVATION
-  app.listen(PORT, () => {
-    console.log("The server is running in port:" + PORT);
+  // Create HTTP server from Express app
+  const server = http.createServer(app);
+
+  // Attach Socket.IO to the HTTP server
+  initSocket(server);
+
+  // Start server
+  server.listen(PORT, () => {
+    console.log("Server running on port:", PORT);
   });
 });
 
