@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import RoomMessages from "../chatroom/RoomMessages";
-
+import { API_BASE_URL } from "../api";
 
 export default function RoomChatPage() {
   const params = useParams();
@@ -26,7 +26,7 @@ export default function RoomChatPage() {
 
 
       // Connect to the server using Socket.IO, sending the JWT in auth
-      const newSocket = io("http://localhost:3000", {
+      const newSocket = io(API_BASE_URL, {
           withCredentials: true, //Do this to send the cookie to the websocket
       });
 

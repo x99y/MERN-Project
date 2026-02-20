@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router"
-import api from "../api";
+import api, { API_BASE_URL } from "../api";
+
 import '../styles/ProfilePage.css';
 
 export default function ProfilePage() {
@@ -42,7 +43,7 @@ export default function ProfilePage() {
     <main className="main-profile">
       <h1>User profile</h1>
       {
-        profile?.image !== "" && <img src={`http://localhost:3000/uploads/${profile.image}`} />
+        profile?.image !== "" && <img src={`${API_BASE_URL}/uploads/${profile.image}`} />
       }
       <h2>Username: { profile?.username }</h2>
       <section className="user-description">

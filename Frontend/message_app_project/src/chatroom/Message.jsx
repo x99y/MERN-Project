@@ -1,5 +1,5 @@
 import "../styles/Message.css";
-
+import { API_BASE_URL } from "../api";
 
 export default function Message({ message }) {
     
@@ -9,7 +9,7 @@ export default function Message({ message }) {
             <div className="user-box">
                 <div className="small-circle">
                     {
-                    message?.profilePic !== "" && <img src={`http://localhost:3000/uploads/${message.profilePic}`} />
+                    message?.profilePic !== "" && <img src={`${API_BASE_URL}/uploads/${message.profilePic}`} />
                     }
                 </div>
                 <div className="username">

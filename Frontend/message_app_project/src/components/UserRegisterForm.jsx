@@ -27,7 +27,7 @@ export default function UserRegisterForm({ setError }) {
 
     try{
       // send to api for authentication verify, then give response, if status 200, display sucessfull message
-      const response = await api.post("http://localhost:3000/users/register",
+      const response = await api.post("/users/register",
         {
           username : username,
           email : email,
