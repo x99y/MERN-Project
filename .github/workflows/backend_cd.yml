@@ -30,7 +30,7 @@ jobs:
             -t gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
    
     - name: Push Docker image to gcr
-      run: docker push -t gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
+      run: docker push gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
 
 
     - id: 'deploy'
