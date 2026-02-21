@@ -17,10 +17,21 @@ jobs:
       working-directory: ./Backend
 
     - name: Authenticate gcloud
-
       uses: google-github-actions/auth@v2
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: configure Docker
+      run: gcloud auth configure-docker
+
+    - name: Build Docker image
+      run: |
+          docker build ./Backend \
+            -t gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
+   
+    - name: Push Docker image to gcr
+      run: docker push -t gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
+
 
     - id: 'deploy'
       name: 'Build and deploy image to GCR'
@@ -41,7 +52,7 @@ jobs:
           # If you already compiled a Docker image, don't use the "source" option. 
           # Using "source" is an awesome lazy way to tell Cloud Run to turn our project into a Docker image.
           # Compare "image" and "source" inputs here: https://github.com/google-github-actions/deploy-cloudrun#inputs
-          source: ./Backend
+          image: gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
           
           #Needed for docker deployment
           flags: '--clear-base-image'
