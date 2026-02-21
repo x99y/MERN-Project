@@ -1,9 +1,5 @@
 const express = require("express");
 const app = express();
-const http = require('http');
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
 const helmet = require("helmet");
 const cors = require("cors");
 const { default: mongoose } = require("mongoose");
@@ -66,16 +62,6 @@ const storage = multer.diskStorage({
 app.get("/", (request,response) => {
   response.sendFile(path.join(__dirname, "public", "index.html"));
 });
-
-
-// Start the server on port 3000
-server.listen(3000, () => {
-  console.log('listening on port :3000');
-});
-
-
-// Import and use the websocket.js file
-require('./sockets/websocket.js')(server);
 
 
 // Route to check MongoDB status

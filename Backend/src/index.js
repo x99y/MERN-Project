@@ -8,7 +8,7 @@ const { dbConnect } = require("./database/connectionManager.js");
 const { app } = require("./server.js");
 const initSocket = require("./sockets/websocket.js");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const HOST = process.env.HOST || 'localhost';
 
 // DATABASE CONNECTION
@@ -20,7 +20,7 @@ dbConnect().then(() => {
   initSocket(server);
 
   // Start server
-  server.listen(PORT, () => {
+  server.listen(PORT, "0.0.0.0", () => {
     console.log("Server running on port:", PORT);
   });
 });
