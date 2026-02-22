@@ -26,10 +26,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build ./Backend \
-          --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
-          --build-arg MONGODB_DATABASE_URL=${{ secrets.MONGODB_DATABASE_URL }} \
-          --build-arg FRONTEND_URL=${{ secrets.FRONTEND_URL }} \
+          docker build ./Backend \
           -t gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
    
     - name: Push Docker image to gcr
@@ -59,6 +56,12 @@ jobs:
           
           #Needed for docker deployment
           flags: '--clear-base-image'
+
+          environment_variables: |
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            MONGODB_DATABASE_URL=${{ secrets.MONGODB_DATABASE_URL }}
+            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+            NODE_ENV=production
 
     # Literally just print the URL for any Actions debugging, not at all necessary for deployment.
     - name: 'Use output'
