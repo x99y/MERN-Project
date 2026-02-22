@@ -40,4 +40,4 @@ jobs:
           --region ${{ secrets.CLOUD_RUN_REGION }} \
           --platform managed \
           --allow-unauthenticated \
-          --set-env-vars JWT_SECRET=${{ secrets.JWT_SECRET }},MONGODB_DATABASE_URL=${{ secrets.MONGODB_DATABASE_URL }},FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+          --set-env-vars NODE_ENV=production,JWT_SECRET=${{ secrets.JWT_SECRET }},MONGODB_DATABASE_URL=${{ secrets.MONGODB_DATABASE_URL }},FRONTEND_URL=${{ secrets.FRONTEND_URL }}
