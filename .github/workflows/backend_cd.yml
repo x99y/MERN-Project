@@ -39,14 +39,33 @@ jobs:
       run: docker push gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
 
 
-    - name: Deploy to Cloud Run
-      run: |
-        gcloud run deploy mern-project-backend \
-          --image gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest \
-          --region ${{ secrets.CLOUD_RUN_REGION }} \
-          --platform managed \
-          --allow-unauthenticated \
-          --set-env-vars NODE_ENV=production \
-          --set-env-vars JWT_SECRET='${{ secrets.JWT_SECRET }}' \
-          --set-env-vars FRONTEND_URL='${{ secrets.FRONTEND_URL }}' \
-          --set-env-vars MONGODB_DATABASE_URL='${{ secrets.MONGODB_DATABASE_URL }}' \
+    - id: 'deploy'
+      name: 'Build and deploy image to GCR'
+      uses: 'google-github-actions/deploy-cloudrun@v2'
+      with:
+          # Some Google Cloud config must set up as repository secrets or organization secrets in this page:
+          # https://github.com/<UserOrOrgName>/<RepoName>/settings/secrets/actions
+          # Service name should match whatever you created under Cloud Run in the GCP web dashboard
+          # https://console.cloud.google.com/run
+          # One service should be one web server, and you can configure a service to run on multiple domains
+          service: ${{ secrets.GCR_SERVICE_NAME }}
+
+          # Region is where your service deployment is hosted. Should be us-central1 or some other free/low-cost to keep costs low.
+          # Deployment location affects latency but not as much as poorly-written database queries! 
+          # If you're not deploying a videogame dedicated server, stick to the free/cheap regions!
+          region: ${{ secrets.GCR_SERVICE_REGION }}
+
+          # If you already compiled a Docker image, don't use the "source" option. 
+          # Using "source" is an awesome lazy way to tell Cloud Run to turn our project into a Docker image.
+          # Compare "image" and "source" inputs here: https://github.com/google-github-actions/deploy-cloudrun#inputs
+          image: gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
+          
+          env_vars: |
+            JWT_SECRET='${{ secrets.JWT_SECRET }}'
+            MONGODB_DATABASE_URL='${{ secrets.MONGODB_DATABASE_URL }}'
+            FRONTEND_URL='${{ secrets.FRONTEND_URL }}'
+            NODE_ENV='production'
+
+    # Literally just print the URL for any Actions debugging, not at all necessary for deployment.
+    - name: 'Use output'
+      run: 'curl "${{ steps.deploy.outputs.url }}"'
