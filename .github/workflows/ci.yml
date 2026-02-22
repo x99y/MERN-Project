@@ -6,13 +6,8 @@ on:
   pull_request:
     branches: [ main , master]
 
-env:
-  JWT_SECRET: ${{secrets.JWT_SECRET}}
-  MONGODB_DATABASE_URL: ${{secrets.MONGODB_DATABASE_URL}}
-  FRONTEND_URL: ${{secrets.FRONTEND_URL}}
 
 jobs:
-
 
   run_backend_tests:
     name: Run Backend Tests
