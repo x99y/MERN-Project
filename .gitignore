@@ -1,1 +1,4 @@
 .env
+
+Backend/test_logs/
+Frontend/message_app_project/test_logs/
