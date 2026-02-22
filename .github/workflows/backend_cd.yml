@@ -32,6 +32,10 @@ jobs:
     - name: Push Docker image to gcr
       run: docker push gcr.io/${{ secrets.GCR_PROJECT_ID }}/mern-project-backend:latest
 
+    - run: echo "Secrets exist"
+      env:
+        FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+        MONGODB_DATABASE_URL: ${{ secrets.MONGODB_DATABASE_URL }}
 
     - name: Deploy to Cloud Run
       run: |
@@ -40,4 +44,4 @@ jobs:
           --region ${{ secrets.CLOUD_RUN_REGION }} \
           --platform managed \
           --allow-unauthenticated \
-          --set-env-vars NODE_ENV=production,JWT_SECRET=${{ secrets.JWT_SECRET }},MONGODB_DATABASE_URL=${{ secrets.MONGODB_DATABASE_URL }},FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+          --set-env-vars NODE_ENV=production,JWT_SECRET=${{ secrets.JWT_SECRET }},FRONTEND_URL=${{ secrets.FRONTEND_URL }},MONGODB_DATABASE_URL=${{ secrets.MONGODB_DATABASE_URL }}
