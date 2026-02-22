@@ -1,14 +1,16 @@
 name: CI
 
-on: 
+on:
   push:
-    branches: [ main , master]
+    branches-ignore:
+      - main
+      - master
   pull_request:
-    branches: [ main , master]
-
+    branches-ignore:
+      - main
+      - master
 
 jobs:
-
   run_backend_tests:
     name: Run Backend Tests
     uses: ./.github/workflows/backend_tests.yml
@@ -16,16 +18,3 @@ jobs:
   run_frontend_tests:
     name: Run Frontend Tests
     uses: ./.github/workflows/frontend_tests.yml
-
-
-  call_cd_backend_workflow:
-    name: Call CD Backend Workflow
-    needs: [run_backend_tests, run_frontend_tests]
-    uses: ./.github/workflows/backend_cd.yml
-    secrets: inherit
-
-  call_cd_frontend_workflow:
-    name: Call CD Frontend Workflow
-    needs: [run_backend_tests, run_frontend_tests, call_cd_backend_workflow]
-    uses: ./.github/workflows/frontend_cd.yml
-    secrets: inherit
