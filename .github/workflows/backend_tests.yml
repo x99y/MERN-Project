@@ -17,7 +17,7 @@ jobs:
         # ensure that the report is output to the backend_test_log.txt, as well as in the actions console 
         run: |
           mkdir -p ./test_logs
-          npx jest --reporters=default --silent=false --json --outputFile=./test_logs/backend_test_log.json
+          npx jest --reporters=default --silent=false 2>&1 | tee ./test_logs/backend_test_log.txt
         working-directory: ./Backend
         env:
           CI: true
