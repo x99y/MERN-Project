@@ -6,10 +6,9 @@ on:
   pull_request:
     branches: [ main , master]
 
-    #do to change this, could be better if we didnt send this to every test workflow
 env:
   JWT_SECRET: ${{secrets.JWT_SECRET}}
-  MONGO_URL: ${{secrets.MONGO_URL}}
+  MONGODB_DATABASE_URL: ${{secrets.MONGODB_DATABASE_URL}}
   FRONTEND_URL: ${{secrets.FRONTEND_URL}}
 
 jobs:
@@ -18,12 +17,10 @@ jobs:
   run_backend_tests:
     name: Run Backend Tests
     uses: ./.github/workflows/backend_tests.yml
-    secrets: inherit
 
   run_frontend_tests:
     name: Run Frontend Tests
     uses: ./.github/workflows/frontend_tests.yml
-    secrets: inherit
 
   call_cd_backend_workflow:
     name: Call CD Backend Workflow
